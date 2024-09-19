@@ -1,25 +1,35 @@
 USE human_friends;
 
-INSERT INTO pets (name, birth_date, gender) VALUES 
-	('Fido', '2019-05-15', 'Male'),
-	('Whiskers', '2019-05-15', 'Male'),
-    ('Hammy', '2021-03-10', 'Female'),
-    ('Buddy', '2018-12-10', 'Male'),
-    ('Smudge', '2020-02-20', 'Male'),
-    ('Peanut', '2021-08-01', 'Male'),
-    ('Bella', '2019-11-11', 'Female'),
-    ('Oliver', '2020-06-30', 'Male');
+INSERT INTO pet_types (id, type) VALUES
+	(1, "Cat"),
+    (2, "Dog"),
+    (3, "Hamster");
+    
+INSERT INTO pack_animal_types (id, type) VALUES
+	(1, "Camel"),
+    (2, "Horse"),
+    (3, "Donkey");
+
+INSERT INTO pets (name, birth_date, gender, pet_type_id) VALUES 
+	('Fido', '2019-05-15', 'Male', 2),
+	('Whiskers', '2019-05-15', 'Male', 1),
+    ('Hammy', '2021-03-10', 'Female', 3),
+    ('Buddy', '2018-12-10', 'Male', 2),
+    ('Smudge', '2020-02-20', 'Male', 1),
+    ('Peanut', '2021-08-01', 'Male', 3),
+    ('Bella', '2019-11-11', 'Female', 2),
+    ('Oliver', '2020-06-30', 'Male', 1);
     
     
-INSERT INTO pack_animals (name, birth_date, gender) VALUES 
-	('Thunder', '2015-07-21', 'Female'),
-    ('Sandy', '2016-11-03', 'Female'),
-    ('Eeyore', '2017-09-18', 'Male'),
-    ('Storm', '2014-05-05', 'Female'),
-    ('Dune', '2018-12-12', 'Female'),
-    ('Burro', '2019-01-23', 'Male'),
-    ('Blaze', '2016-02-29', 'Male'),
-    ('Sahara', '2015-08-14', 'Female');
+INSERT INTO pack_animals (name, birth_date, gender, pack_animal_type_id) VALUES 
+	('Thunder', '2015-07-21', 'Female', 2),
+    ('Sandy', '2016-11-03', 'Female', 1),
+    ('Eeyore', '2017-09-18', 'Male', 3),
+    ('Storm', '2014-05-05', 'Female', 2),
+    ('Dune', '2018-12-12', 'Female', 1),
+    ('Burro', '2019-01-23', 'Male', 3),
+    ('Blaze', '2016-02-29', 'Male', 2),
+    ('Sahara', '2015-08-14', 'Female', 1);
     
 INSERT INTO commands (name) VALUES 
 	('Sit'),
@@ -87,4 +97,24 @@ INSERT INTO pack_animal_commands (id_command, id_pack_animal) VALUES
     ((SELECT id FROM commands WHERE name = 'Gallop'), 7),
     ((SELECT id FROM commands WHERE name = 'Walk'), 8),
     ((SELECT id FROM commands WHERE name = 'Run'), 8);
+
+INSERT INTO dogs(id) VALUES
+	(1), (4), (7);
+    
+INSERT INTO cats(id) VALUES
+	(2), (5), (8);
+    
+INSERT INTO hamsters(id) VALUES
+	(3), (6);
+
+INSERT INTO horses (id) VALUES
+	(1), (4), (7);
+
+INSERT INTO camels (id) VALUES
+	(2), (5), (8);
+    
+INSERT INTO donkeys (id) VALUES
+	(3), (6);
+
+
 

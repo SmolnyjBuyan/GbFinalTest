@@ -13,68 +13,85 @@ DROP TABLE IF EXISTS pack_animal_commands;
 DROP TABLE IF EXISTS commands;
 DROP TABLE IF EXISTS pack_animals;
 DROP TABLE IF EXISTS pets;
+DROP TABLE IF EXISTS pet_types;
+DROP TABLE IF EXISTS pack_animal_types;
 
-
+CREATE TABLE pet_types (
+	id INT UNSIGNED PRIMARY KEY,
+    type VARCHAR(45) UNIQUE NOT NULL
+);
 
 CREATE TABLE pets (
-    id INT UNSIGNED AUTO_INCREMENT UNIQUE NOT NULL PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(45) NOT NULL,
     birth_date DATE NOT NULL,
-    gender VARCHAR(6) NOT NULL
+    gender VARCHAR(6) NOT NULL,
+    pet_type_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY(pet_type_id) REFERENCES pet_types(id),
+    CONSTRAINT pets_alt_pk UNIQUE (id, pet_type_id)
+);
+
+CREATE TABLE pack_animal_types (
+	id INT UNSIGNED PRIMARY KEY,
+    type VARCHAR(45) UNIQUE NOT NULL
 );
 
 CREATE TABLE pack_animals (
-    id INT UNSIGNED AUTO_INCREMENT UNIQUE NOT NULL PRIMARY KEY,
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(45) NOT NULL,
     birth_date DATE NOT NULL,
-    gender VARCHAR(6) NOT NULL
+    gender VARCHAR(6) NOT NULL,
+    pack_animal_type_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY(pack_animal_type_id) REFERENCES pack_animal_types(id),
+    CONSTRAINT pack_animals_alt_pk UNIQUE (id, pack_animal_type_id)
+    
 );
 
 CREATE TABLE cats (
-    id INT UNSIGNED UNIQUE NOT NULL PRIMARY KEY,
-    CONSTRAINT fk_cat FOREIGN KEY(id) REFERENCES pets(id)
+    id INT UNSIGNED PRIMARY KEY,
+    pet_type_id INT UNSIGNED GENERATED ALWAYS AS (1) STORED,
+    CONSTRAINT fk_cat FOREIGN KEY(id, pet_type_id) REFERENCES pets(id, pet_type_id)
 	ON DELETE CASCADE
-	ON UPDATE CASCADE
 );
     
 CREATE TABLE dogs (
-	id INT UNSIGNED UNIQUE NOT NULL PRIMARY KEY,
-    CONSTRAINT fk_dog FOREIGN KEY(id) REFERENCES pets(id)
+	id INT UNSIGNED PRIMARY KEY,
+    pet_type_id INT UNSIGNED GENERATED ALWAYS AS (2) STORED,
+    CONSTRAINT fk_dog FOREIGN KEY(id, pet_type_id) REFERENCES pets(id, pet_type_id)
     ON DELETE CASCADE
-	ON UPDATE CASCADE
 );
 
 CREATE TABLE hamsters (
-	id INT UNSIGNED UNIQUE NOT NULL PRIMARY KEY,
-    CONSTRAINT fk_hamster FOREIGN KEY(id) REFERENCES pets(id)
+	id INT UNSIGNED PRIMARY KEY,
+    pet_type_id INT UNSIGNED GENERATED ALWAYS AS (3) STORED,
+    CONSTRAINT fk_hamster FOREIGN KEY(id, pet_type_id) REFERENCES pets(id, pet_type_id)
     ON DELETE CASCADE
-	ON UPDATE CASCADE
 );
 
 CREATE TABLE camels (
-	id INT UNSIGNED UNIQUE NOT NULL PRIMARY KEY,
-    CONSTRAINT fk_camel FOREIGN KEY(id) REFERENCES pack_animals(id)
+	id INT UNSIGNED PRIMARY KEY,
+    pack_animal_type_id INT UNSIGNED GENERATED ALWAYS AS (1) STORED,
+    CONSTRAINT fk_camel FOREIGN KEY(id, pack_animal_type_id) REFERENCES pack_animals(id, pack_animal_type_id)
     ON DELETE CASCADE
-	ON UPDATE CASCADE
 );
 
 CREATE TABLE horses (
-	id INT UNSIGNED UNIQUE NOT NULL PRIMARY KEY,
-    CONSTRAINT fk_horses FOREIGN KEY(id) REFERENCES pack_animals(id)
+	id INT UNSIGNED PRIMARY KEY,
+    pack_animal_type_id INT UNSIGNED GENERATED ALWAYS AS (2) STORED,
+    CONSTRAINT fk_horses FOREIGN KEY(id, pack_animal_type_id) REFERENCES pack_animals(id, pack_animal_type_id)
     ON DELETE CASCADE
-	ON UPDATE CASCADE
 );
 
 CREATE TABLE donkeys (
-	id INT UNSIGNED UNIQUE NOT NULL PRIMARY KEY,
-    CONSTRAINT fk_donkey FOREIGN KEY(id) REFERENCES pack_animals(id)
+	id INT UNSIGNED PRIMARY KEY,
+    pack_animal_type_id INT UNSIGNED GENERATED ALWAYS AS (3) STORED,
+    CONSTRAINT fk_donkey FOREIGN KEY(id, pack_animal_type_id) REFERENCES pack_animals(id, pack_animal_type_id)
     ON DELETE CASCADE
-	ON UPDATE CASCADE
 );
 
 
 CREATE TABLE commands (
-	id INT UNSIGNED AUTO_INCREMENT UNIQUE NOT NULL PRIMARY KEY,
+	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(45) UNIQUE NOT NULL
 );
 
