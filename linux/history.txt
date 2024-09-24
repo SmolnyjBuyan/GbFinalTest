@@ -1,0 +1,56 @@
+ 2037  mkdir cat_linux
+ 2038  cd cat_linux/
+ 2039  LL
+ 2040  l
+ 2041  ll
+ 2042  cat Pets.txt
+ 2043  cat > Pets.txt
+ 2044  cat Pets.txt 
+ 2045  cat >> Pets.txt
+ 2046  ll
+ 2047  rm -rf Pets.txt 
+ 2048  cat > Pets.txt
+ 2049  cat > Pack animals.txt
+ 2050  cat > Pack/ animals.txt
+ 2051  cat > Pack\ animals.txt
+ 2052  cat Pets.txt Pack\ animals.txt PetsAndPack\ animals.txt
+ 2053  ll
+ 2054  cat Pack
+ 2055  rm -rf Pack
+ 2056  cat Pets.txt Pack\ animals.txt> PetsAndPack\ animals.txt
+ 2057  cat PetsAndPack\ animals.txt 
+ 2058  mv PetsAndPack\ animals.txt HumanFriends.txt
+ 2059  ls
+ 2060  mkdir dir_for_human_friends
+ 2061  mv HumanFriends.txt Human\ Friends.txt
+ 2062  ll
+ 2063  mv Human\ Friends.txt dir_for_human_friends/
+ 2064  ll
+ 2065  ll dir_for_human_friends/
+ 2066  history
+
+ 1978  sudo export PASSWORD='************'
+ 1979  sudo su
+  193  nano docker-compose.yml
+
+services:
+  mysql:
+    image: mysql:8.0.31
+    environment:
+      - MYSQL_ROOT_PASSWORD=${PASSWORD:?error}
+
+  myphp:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8081:80
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+
+
+  194  docker compose up  -d
+  195  docker ps
+
+
+
