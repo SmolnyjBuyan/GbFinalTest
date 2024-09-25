@@ -35,21 +35,21 @@ public class Main {
         Cat tom = new Cat("Tom", LocalDate.of(2015, 10, 30), Gender.MALE);
         String sql = "INSERT INTO pets(name, birth_date, gender, pet_type_id) VALUES(?, ?, ?, ?)";
 
+//
+//        try (Connection connection = DriverManager.getConnection(dbUrl, user, password)) {
+//            DataBaseManager dataBaseManager = new DataBaseManager();
+//            dataBaseManager.insertIntoCats(tom);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 
-        try (Connection connection = DriverManager.getConnection(dbUrl, user, password);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, tom.getName());
-                statement.setObject(2, tom.getBirthDate());
-                statement.setString(3, tom.getGender().getTitle());
-                statement.setInt(4, PetType.CAT.getId());
-                statement.addBatch();
-                statement.addBatch("SET @last_id_in_pets = LAST_INSERT_ID()");
-                statement.addBatch("INSERT INTO cats(id) VALUES (@last_id_in_pets)");
-                statement.executeBatch();
+        DataBaseManager dataBaseManager = new DataBaseManager();
+        dataBaseManager.open();
+        try {
+            dataBaseManager.insertIntoCats(tom);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
 
 
     }
