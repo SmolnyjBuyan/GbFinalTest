@@ -9,11 +9,14 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class DataBaseManager {
+    private static final String DBURL = "jdbc:mysql://localhost:3306/human_friends";
+    private static final String USER = "root";
+    private static final String PASSWORD = "Andrey6542564";
     private Connection connection;
 
-    public void open() {
-        connection = DataBaseConnect.getConnection();
-    }
+//    public void open() {
+//        connection = DriverManager.getConnection(DBURL, USER, PASSWORD);
+//    }
 
     public void insertIntoCats(Cat cat) throws SQLException {
         PreparedStatement statement = insertIntoPets(cat, PetType.CAT);
@@ -23,12 +26,15 @@ public class DataBaseManager {
         statement.executeBatch();
     }
 
-    public void insertIntoDogs(Dog dog) throws SQLException {
-        PreparedStatement statement = insertIntoPets(dog, PetType.DOG);
-        statement.addBatch();
-        statement.addBatch("SET @last_id_in_pets = LAST_INSERT_ID()");
-        statement.addBatch("INSERT INTO dogs(id) VALUES (@last_id_in_pets)");
-        statement.executeBatch();
+    public void insertIntoDogs(Dog dog) {
+        try (PreparedStatement statement = insertIntoPets(dog, PetType.DOG)) {
+            statement.addBatch();
+            statement.addBatch("SET @last_id_in_pets = LAST_INSERT_ID()");
+            statement.addBatch("INSERT INTO dogs(id) VALUES (@last_id_in_pets)");
+            statement.executeBatch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private PreparedStatement insertIntoPets(Pet pet, PetType petType) throws SQLException {

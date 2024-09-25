@@ -43,14 +43,18 @@ public class Main {
 //            throw new RuntimeException(e);
 //        }
 
-        DataBaseManager dataBaseManager = new DataBaseManager();
-        dataBaseManager.open();
-        try {
-            dataBaseManager.insertIntoCats(tom);
+        try (Connection connection = DataBaseConnect.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                LocalDate birth_date = resultSet.getDate(3).toLocalDate();
+                String gender = resultSet.getString(4);
+                System.out.println(id + "\t"+ name + "\t"+ birth_date + "\t"+ gender);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }
