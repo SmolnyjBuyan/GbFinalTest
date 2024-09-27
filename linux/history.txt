@@ -53,4 +53,15 @@ services:
   195  docker ps
 
 
+ 2018  sudo dpkg -i google-chrome-stable_current_amd64.deb 
+ 2019  dpkg --list | grep goog
+ 2020  dpkg -purge google-chrome-stable
+ 2021  sudo dpkg -purge google-chrome-stable
+ 2022  sudo dpkg --purge google-chrome-stable
+ 2023  dpkg -l | grep google
+ 2024  history
+
+
+
+
 
