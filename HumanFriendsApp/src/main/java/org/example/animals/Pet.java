@@ -1,10 +1,9 @@
 package org.example.animals;
 
 import org.example.utils.Gender;
-import org.example.utils.PetType;
+import org.example.utils.AnimalType;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 
 public abstract class Pet implements Animal {
@@ -13,7 +12,7 @@ public abstract class Pet implements Animal {
     private LocalDate birthDate;
     private HashSet<String> commands;
     private Gender gender;
-    private PetType petType;
+    private AnimalType petType;
 
     protected Pet(String name, LocalDate birthDate, Gender gender) {
         this.name = name;
@@ -21,11 +20,11 @@ public abstract class Pet implements Animal {
         this.gender = gender;
     }
 
-    protected void setPetType(PetType petType) {
+    protected void setPetType(AnimalType petType) {
         this.petType = petType;
     }
 
-    public PetType getPetType() {
+    public AnimalType getPetType() {
         return petType;
     }
 
