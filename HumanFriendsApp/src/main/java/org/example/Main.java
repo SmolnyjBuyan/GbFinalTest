@@ -1,25 +1,12 @@
 package org.example;
 
-import org.example.animals.Animal;
-import org.example.animals.Cat;
-import org.example.utils.AnimalFactory;
-import org.example.utils.AnimalType;
-import org.example.utils.Gender;
 import org.example.view.View;
 
-import java.sql.*;
-import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
         View view = new View();
-        view.executeMenu();
-
-
-
-
-
-
+        view.execute();
 
 
 //
