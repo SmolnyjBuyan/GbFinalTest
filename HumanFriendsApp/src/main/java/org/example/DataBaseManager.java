@@ -10,42 +10,29 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class DataBaseManager {
+    private static final String PETS_TABLE_QUERY = "SELECT * FROM pets";
+    private static final int ID_COLUMN_INDEX = 1;
+    private static final int NAME_COLUMN_INDEX = 2;
+    private static final int BIRTH_DATE_COLUMN_INDEX = 3;
+    private static final int GENDER_COLUMN_INDEX = 4;
+    private static final int TYPE_COLUMN_INDEX = 5;
 
-    public void showAnimals() {
-        String query = "SELECT * FROM pets";
-
-        try (Connection connection = DataBaseConnect.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
-            while (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                String name = resultSet.getString(2);
-                LocalDate birth_date = resultSet.getDate(3).toLocalDate();
-                String gender = resultSet.getString(4);
-                System.out.println(id + "\t"+ name + "\t"+ birth_date + "\t"+ gender);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    private ArrayList<Animal> getAnimals() {
-        String query = "SELECT * FROM pets";
+    public ArrayList<Animal> getPets() throws SQLException {
         ArrayList<Animal> animals = new ArrayList<>();
 
         try (Connection connection = DataBaseConnect.getConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+             ResultSet resultSet = statement.executeQuery(PETS_TABLE_QUERY)) {
             while (resultSet.next()) {
-                String name = resultSet.getString(2);
-                LocalDate birthDate = resultSet.getDate(3).toLocalDate();
-                String gender = resultSet.getString(4);
-                int petTypeId = resultSet.getInt(5);
-                animals.add(AnimalFactory.create(name, birthDate, Gender.valueOf(gender), AnimalType.get(petTypeId)));
+                int id = resultSet.getInt(ID_COLUMN_INDEX);
+                String name = resultSet.getString(NAME_COLUMN_INDEX);
+                LocalDate birthDate = resultSet.getDate(BIRTH_DATE_COLUMN_INDEX).toLocalDate();
+                String gender = resultSet.getString(GENDER_COLUMN_INDEX);
+                int TypeId = resultSet.getInt(TYPE_COLUMN_INDEX);
+                Animal animal = AnimalFactory.create(name, birthDate, Gender.get(gender), AnimalType.get(TypeId));
+                animal.setId(id);
+                animals.add(animal);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return animals;
     }

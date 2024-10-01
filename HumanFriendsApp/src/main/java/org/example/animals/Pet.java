@@ -20,27 +20,42 @@ public abstract class Pet implements Animal {
         this.gender = gender;
     }
 
-    protected void setPetType(AnimalType petType) {
-        this.petType = petType;
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public AnimalType getPetType() {
-        return petType;
+    @Override
+    public int getId() {
+        return id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public HashSet<String> getCommands() {
-        return commands;
-    }
-
+    @Override
     public Gender getGender() {
         return gender;
+    }
+
+    @Override
+    public AnimalType getPetType() {
+        return petType;
+    }
+
+    public void setPetType(AnimalType petType) {
+        this.petType = petType;
+    }
+
+    @Override
+    public HashSet<String> getCommands() {
+        return commands;
     }
 }
