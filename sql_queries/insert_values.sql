@@ -1,16 +1,14 @@
 USE human_friends;
 
-INSERT INTO pet_types (id, type) VALUES
+INSERT INTO animal_types (id, type) VALUES
 	(1, "Cat"),
     (2, "Dog"),
-    (3, "Hamster");
-    
-INSERT INTO pack_animal_types (id, type) VALUES
-	(1, "Camel"),
-    (2, "Horse"),
-    (3, "Donkey");
+    (3, "Hamster"),
+    (4, "Camel"),
+    (5, "Horse"),
+    (6, "Donkey");
 
-INSERT INTO pets (name, birth_date, gender, pet_type_id) VALUES 
+INSERT INTO pets (name, birth_date, gender, animal_type_id) VALUES 
 	('Fido', '2019-05-15', 'Male', 2),
 	('Whiskers', '2019-05-15', 'Male', 1),
     ('Hammy', '2021-03-10', 'Female', 3),
@@ -21,15 +19,15 @@ INSERT INTO pets (name, birth_date, gender, pet_type_id) VALUES
     ('Oliver', '2020-06-30', 'Male', 1);
     
     
-INSERT INTO pack_animals (name, birth_date, gender, pack_animal_type_id) VALUES 
-	('Thunder', '2015-07-21', 'Female', 2),
-    ('Sandy', '2016-11-03', 'Female', 1),
-    ('Eeyore', '2017-09-18', 'Male', 3),
-    ('Storm', '2014-05-05', 'Female', 2),
-    ('Dune', '2018-12-12', 'Female', 1),
-    ('Burro', '2019-01-23', 'Male', 3),
-    ('Blaze', '2016-02-29', 'Male', 2),
-    ('Sahara', '2015-08-14', 'Female', 1);
+INSERT INTO pack_animals (name, birth_date, gender, animal_type_id) VALUES 
+	('Thunder', '2015-07-21', 'Female', 5),
+    ('Sandy', '2016-11-03', 'Female', 4),
+    ('Eeyore', '2017-09-18', 'Male', 6),
+    ('Storm', '2014-05-05', 'Female', 5),
+    ('Dune', '2018-12-12', 'Female', 4),
+    ('Burro', '2019-01-23', 'Male', 6),
+    ('Blaze', '2016-02-29', 'Male', 5),
+    ('Sahara', '2015-08-14', 'Female', 4);
     
 INSERT INTO commands (name) VALUES 
 	('Sit'),
