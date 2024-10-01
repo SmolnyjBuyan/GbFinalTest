@@ -1,12 +1,13 @@
 package org.example;
 
-import org.example.animals.Cat;
-import org.example.animals.Dog;
-import org.example.animals.Hamster;
-import org.example.animals.Pet;
+import org.example.animals.*;
+import org.example.utils.AnimalFactory;
+import org.example.utils.AnimalType;
+import org.example.utils.Gender;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class DataBaseManager {
 
@@ -26,6 +27,27 @@ public class DataBaseManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    private ArrayList<Animal> getAnimals() {
+        String query = "SELECT * FROM pets";
+        ArrayList<Animal> animals = new ArrayList<>();
+
+        try (Connection connection = DataBaseConnect.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                String name = resultSet.getString(2);
+                LocalDate birthDate = resultSet.getDate(3).toLocalDate();
+                String gender = resultSet.getString(4);
+                int petTypeId = resultSet.getInt(5);
+                animals.add(AnimalFactory.create(name, birthDate, Gender.valueOf(gender), AnimalType.get(petTypeId)));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return animals;
     }
 
     private PreparedStatement getInsertIntoPetsStatement(Pet pet) throws SQLException {
