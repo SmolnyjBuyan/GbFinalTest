@@ -9,6 +9,6 @@ public class Dog extends Pet{
 
     public Dog(String name, LocalDate birthDate, Gender gender) {
         super(name, birthDate, gender);
-        setPetType(AnimalType.DOG);
+        setType(AnimalType.DOG);
     }
 }

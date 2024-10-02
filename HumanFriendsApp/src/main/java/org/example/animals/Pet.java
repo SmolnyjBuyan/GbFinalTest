@@ -12,7 +12,7 @@ public abstract class Pet implements Animal {
     private LocalDate birthDate;
     private HashSet<String> commands;
     private Gender gender;
-    private AnimalType petType;
+    private AnimalType type;
 
     protected Pet(String name, LocalDate birthDate, Gender gender) {
         this.name = name;
@@ -46,12 +46,12 @@ public abstract class Pet implements Animal {
     }
 
     @Override
-    public AnimalType getPetType() {
-        return petType;
+    public AnimalType getType() {
+        return type;
     }
 
-    public void setPetType(AnimalType petType) {
-        this.petType = petType;
+    public void setType(AnimalType type) {
+        this.type = type;
     }
 
     @Override

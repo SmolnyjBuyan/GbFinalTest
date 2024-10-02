@@ -11,7 +11,7 @@ public interface Animal {
     public int getId();
     public String getName();
     public LocalDate getBirthDate();
-    public AnimalType getPetType();
+    public AnimalType getType();
     public HashSet<String> getCommands();
     public Gender getGender();
 }

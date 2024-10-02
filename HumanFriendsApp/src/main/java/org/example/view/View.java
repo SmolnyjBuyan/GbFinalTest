@@ -2,17 +2,20 @@ package org.example.view;
 
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
-import org.example.DataBaseManager;
+import org.example.DataBaseController;
 import org.example.animals.Animal;
+import org.example.utils.AnimalType;
+import org.example.utils.Gender;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class View {
     Scanner scanner = new Scanner(System.in);
-    DataBaseManager dataBaseManager = new DataBaseManager();
+    DataBaseController dataBaseManager = new DataBaseController();
 
     private static final String[] MAIN_MENU = {
             "1. Show animals",
@@ -21,26 +24,35 @@ public class View {
             "0. Exit"
     };
 
+    private static final String[] ADD_ANIMAL_MENU = {
+            "1. Cat",
+            "2. Dog",
+            "3. Hamster",
+            "0. Exit"
+    };
+
+
     private static void print(String[] options) {
+        System.out.println();
         for (String option : options) {
             System.out.println(option);
         }
     }
     public void start() {
         print(MAIN_MENU);
-        navigate(getOption(MAIN_MENU.length));
+        navigate(promptOption(MAIN_MENU.length));
     }
 
     public void pause() {
         System.out.println("\nContinue? [1-Yes, 0-No]");
-        switch (getOption(2)) {
+        switch (promptOption(2)) {
             case 1 -> start();
             case 0 -> System.exit(0);
         }
 
     }
 
-    private int getOption(int optionsCount) {
+    private int promptOption(int optionsCount) {
         int option = -1;
 
         while (!(option >= 0 && option <= optionsCount - 1)) {
@@ -61,6 +73,7 @@ public class View {
     private void navigate(int option) {
         switch (option) {
             case 1 -> showAnimals();
+            case 2 -> addAnimal();
             case 0 -> System.exit(0);
         }
     }
@@ -85,14 +98,26 @@ public class View {
         asciiTable.addRule();
         for (Animal animal : animals) {
             asciiTable.addRow(animal.getId(), animal.getName(),
-                    animal.getBirthDate(), animal.getGender(), animal.getPetType());
+                    animal.getBirthDate(), animal.getGender(), animal.getType());
             asciiTable.addRule();
         }
         asciiTable.setTextAlignment(TextAlignment.CENTER);
         System.out.println(asciiTable.render());
     }
 
-    private String prompt() {
-        return scanner.nextLine();
+    private void addAnimal() {
+        print(ADD_ANIMAL_MENU);
+        AnimalType type = AnimalType.get(promptOption(ADD_ANIMAL_MENU.length));
+        String name = promptName();
+        System.out.println(name);
+        LocalDate birthDate;
+        Gender gender;
+//        dataBaseManager.insert(AnimalFactory.create());
+    }
+
+    private String promptName() {
+        System.out.print("Enter the name: ");
+        String name = scanner.nextLine();
+        return name;
     }
 }

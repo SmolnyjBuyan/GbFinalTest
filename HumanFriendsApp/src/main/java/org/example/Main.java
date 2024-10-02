@@ -1,6 +1,13 @@
 package org.example;
 
+import org.example.animals.Animal;
+import org.example.utils.AnimalFactory;
+import org.example.utils.AnimalType;
+import org.example.utils.Gender;
 import org.example.view.View;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
 
 
 public class Main {
@@ -8,7 +15,13 @@ public class Main {
         View view = new View();
         view.start();
 
-
+        Animal tom = AnimalFactory.create("Tom", LocalDate.of(2015, 10, 30), Gender.MALE, AnimalType.CAT);
+        DataBaseController dataBase = new DataBaseController();
+        try {
+            dataBase.insert(tom);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 //
 //        String query = "SELECT * FROM pets";
 //        Animal tom = AnimalFactory.create("Tom", LocalDate.of(2015, 10, 30), Gender.MALE, AnimalType.CAT);
