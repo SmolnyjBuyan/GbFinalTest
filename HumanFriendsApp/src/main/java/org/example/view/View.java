@@ -5,17 +5,20 @@ import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import org.example.DataBaseController;
 import org.example.animals.Animal;
 import org.example.utils.AnimalType;
+import org.example.utils.DateValidator;
 import org.example.utils.Gender;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class View {
     Scanner scanner = new Scanner(System.in);
     DataBaseController dataBaseManager = new DataBaseController();
+    DateValidator dateValidator = new DateValidator();
 
     private static final String[] MAIN_MENU = {
             "1. Show animals",
@@ -24,7 +27,7 @@ public class View {
             "0. Exit"
     };
 
-    private static final String[] ADD_ANIMAL_MENU = {
+    private static final String[] ANIMAL_TYPE_MENU = {
             "1. Cat",
             "2. Dog",
             "3. Hamster",
@@ -36,6 +39,13 @@ public class View {
         System.out.println();
         for (String option : options) {
             System.out.println(option);
+        }
+    }
+
+    private static <K, V> void print(Map<K, V> map) {
+        System.out.println();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + ". " + entry.getValue());
         }
     }
     public void start() {
@@ -50,24 +60,6 @@ public class View {
             case 0 -> System.exit(0);
         }
 
-    }
-
-    private int promptOption(int optionsCount) {
-        int option = -1;
-
-        while (!(option >= 0 && option <= optionsCount - 1)) {
-            try {
-                System.out.print("\nChoose an option [0-" + (optionsCount - 1) + "]: ");
-                option = scanner.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter an integer value between 0 and " + (optionsCount - 1));
-                scanner.next();
-            } catch (Exception e) {
-                System.out.println("An unexpected error happened. Please try again");
-                scanner.next();
-            }
-        }
-        return option;
     }
 
     private void navigate(int option) {
@@ -106,18 +98,48 @@ public class View {
     }
 
     private void addAnimal() {
-        print(ADD_ANIMAL_MENU);
-        AnimalType type = AnimalType.get(promptOption(ADD_ANIMAL_MENU.length));
+        print(AnimalType.ID_FOR_ANIMAL_TYPE);
+        AnimalType type = AnimalType.get(promptOption(ANIMAL_TYPE_MENU.length));
+
         String name = promptName();
-        System.out.println(name);
-        LocalDate birthDate;
-        Gender gender;
+//        LocalDate birthDate  = promptDate();
+
+
+
 //        dataBaseManager.insert(AnimalFactory.create());
     }
 
     private String promptName() {
-        System.out.print("Enter the name: ");
-        String name = scanner.nextLine();
-        return name;
+        System.out.print("Enter a name: ");
+        return scanner.next();
     }
+
+    private LocalDate promptDate() {
+        String date;
+        do {
+            System.out.print("Enter a date of birth in the format [1993-10-30]: ");
+            date = scanner.next();
+        } while (!(dateValidator.isValid(date)));
+        return LocalDate.parse(date);
+    }
+
+    private int promptOption(int optionsCount) {
+        int option = -1;
+
+        while (!(option >= 0 && option <= optionsCount - 1)) {
+            try {
+                System.out.print("\nChoose an option [0-" + (optionsCount - 1) + "]: ");
+                option = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter an integer value between 0 and " + (optionsCount - 1));
+                scanner.next();
+            } catch (Exception e) {
+                System.out.println("An unexpected error happened. Please try again");
+                scanner.next();
+            }
+        }
+        return option;
+    }
+
+
 }

@@ -15,13 +15,13 @@ public class Main {
         View view = new View();
         view.start();
 
-        Animal tom = AnimalFactory.create("Tom", LocalDate.of(2015, 10, 30), Gender.MALE, AnimalType.CAT);
-        DataBaseController dataBase = new DataBaseController();
-        try {
-            dataBase.insert(tom);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+//        Animal tom = AnimalFactory.create("Tom", LocalDate.of(2015, 10, 30), Gender.MALE, AnimalType.CAT);
+//        DataBaseController dataBase = new DataBaseController();
+//        try {
+//            dataBase.insert(tom);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 //
 //        String query = "SELECT * FROM pets";
 //        Animal tom = AnimalFactory.create("Tom", LocalDate.of(2015, 10, 30), Gender.MALE, AnimalType.CAT);

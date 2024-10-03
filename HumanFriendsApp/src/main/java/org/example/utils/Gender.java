@@ -1,15 +1,17 @@
 package org.example.utils;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum Gender {
     MALE("Male"), FEMALE("Female");
     private final String TITLE;
-    static final Map<String, Gender> TITLE_FOR_GENDER = Map.of(
-            "Male", MALE,
-            "Female", FEMALE
-    );
+    public static final Map<String, Gender> TITLE_FOR_GENDER = new LinkedHashMap<>();
 
+    static {
+        TITLE_FOR_GENDER.put("Male", MALE);
+        TITLE_FOR_GENDER.put("Female", FEMALE);
+    }
     Gender(String title) {
         this.TITLE = title;
     }
