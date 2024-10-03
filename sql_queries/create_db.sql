@@ -14,19 +14,26 @@ DROP TABLE IF EXISTS commands;
 DROP TABLE IF EXISTS pack_animals;
 DROP TABLE IF EXISTS pets;
 DROP TABLE IF EXISTS animal_types;
+DROP TABLE IF EXISTS gender_identities;
 
 CREATE TABLE animal_types (
 	id INT UNSIGNED PRIMARY KEY,
     type VARCHAR(45) UNIQUE NOT NULL
 );
 
+CREATE TABLE gender_identities (
+	id TINYINT PRIMARY KEY,
+    gender VARCHAR(6) UNIQUE NOT NULL
+);
+
 CREATE TABLE pets (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(45) NOT NULL,
     birth_date DATE NOT NULL,
-    gender VARCHAR(6) NOT NULL,
+    gender_id TINYINT NOT NULL,
     animal_type_id INT UNSIGNED NOT NULL,
     FOREIGN KEY(animal_type_id) REFERENCES animal_types(id),
+    FOREIGN KEY(gender_id) REFERENCES gender_identities(id),
     CONSTRAINT pets_alt_pk UNIQUE (id, animal_type_id)
 );
 
@@ -34,9 +41,10 @@ CREATE TABLE pack_animals (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(45) NOT NULL,
     birth_date DATE NOT NULL,
-    gender VARCHAR(6) NOT NULL,
+    gender_id TINYINT NOT NULL,
     animal_type_id INT UNSIGNED NOT NULL,
     FOREIGN KEY(animal_type_id) REFERENCES animal_types(id),
+    FOREIGN KEY(gender_id) REFERENCES gender_identities(id),
     CONSTRAINT pack_animals_alt_pk UNIQUE (id, animal_type_id)
     
 );
