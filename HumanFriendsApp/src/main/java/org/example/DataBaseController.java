@@ -49,7 +49,7 @@ public class DataBaseController {
     }
 
     private static PreparedStatement getInsertIntoPetsStatement(Animal pet) throws SQLException {
-        String query = "INSERT INTO pets(name, birth_date, gender, animal_type_id) VALUES(?, ?, ?, ?)";
+        String query = "INSERT INTO pets(name, birth_date, gender_id, animal_type_id) VALUES(?, ?, ?, ?)";
         PreparedStatement statement = DataBaseConnect.getConnection().prepareStatement(query);
         statement.setString(1, pet.getName());
         statement.setObject(2, pet.getBirthDate());
@@ -76,7 +76,7 @@ public class DataBaseController {
     private static void insertIntoHamsters(Animal hamster) throws SQLException {
         try (PreparedStatement statement = getInsertIntoPetsStatement(hamster)) {
             statement.addBatch();
-            statement.addBatch("INSERT INTO hamster(id) VALUES (LAST_INSERT_ID())");
+            statement.addBatch("INSERT INTO hamsters(id) VALUES (LAST_INSERT_ID())");
             statement.executeBatch();
         }
     }

@@ -9,14 +9,15 @@ import org.example.utils.AnimalType;
 import org.example.utils.DateValidator;
 import org.example.utils.Gender;
 
+import java.io.Console;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
 public class View {
-    Scanner scanner = new Scanner(System.in);
     DataBaseController dataBaseController = new DataBaseController();
     DateValidator dateValidator = new DateValidator();
+
     public static final Map<Integer, String> MAIN_MENU = new LinkedHashMap<>();
     static {
         MAIN_MENU.put(1, "Show animals");
@@ -46,7 +47,8 @@ public class View {
     }
 
     public void pause() {
-        System.out.print("Press \"ENTER\" to continue...");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Press \"ENTER\" to continue...");
         scanner.nextLine();
         start();
     }
@@ -92,19 +94,26 @@ public class View {
             System.out.println(e.getClass());
             System.out.println(e.getMessage());
         }
+        start();
     }
 
     private String promptName() {
         System.out.print("Enter a name: ");
-        return scanner.next();
+        try (Scanner scanner = new Scanner(System.in)){
+            return scanner.nextLine();
+        }
     }
 
     private LocalDate promptDate() {
         String date;
-        do {
-            System.out.print("Enter a date of birth in the format [1993-10-30]: ");
-            date = scanner.next();
-        } while (!(dateValidator.isValid(date)));
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            do {
+                System.out.print("Enter a date of birth in the format [1993-10-30]: ");
+                date = scanner.next();
+            } while (!(dateValidator.isValid(date)));
+        }
+
         return LocalDate.parse(date);
     }
 
@@ -112,19 +121,17 @@ public class View {
         int option = -1;
 
         do {
-            try {
+            try (Scanner scanner = new Scanner(System.in)) {
                 System.out.print("\nChoose an option " + map.keySet() + ": ");
                 option = scanner.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Please enter an integer value " + map.keySet());
-                scanner.nextLine();
             } catch (Exception e) {
                 System.out.println("An unexpected error happened. Please try again");
-                scanner.nextLine();
+                System.out.println(e.getClass() + e.getMessage());
             }
         } while (!map.containsKey(option));
 
-        scanner.nextLine();
         return option;
     }
 
