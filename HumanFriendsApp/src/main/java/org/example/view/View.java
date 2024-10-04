@@ -4,62 +4,37 @@ import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import org.example.DataBaseController;
 import org.example.animals.Animal;
+import org.example.utils.AnimalFactory;
 import org.example.utils.AnimalType;
 import org.example.utils.DateValidator;
 import org.example.utils.Gender;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class View {
     Scanner scanner = new Scanner(System.in);
-    DataBaseController dataBaseManager = new DataBaseController();
+    DataBaseController dataBaseController = new DataBaseController();
     DateValidator dateValidator = new DateValidator();
-
-    private static final String[] MAIN_MENU = {
-            "1. Show animals",
-            "2. Add an animal",
-            "3. Teach an animal a new command",
-            "0. Exit"
-    };
-
-    private static final String[] ANIMAL_TYPE_MENU = {
-            "1. Cat",
-            "2. Dog",
-            "3. Hamster",
-            "0. Exit"
-    };
-
-
-    private static void print(String[] options) {
-        System.out.println();
-        for (String option : options) {
-            System.out.println(option);
-        }
+    public static final Map<Integer, String> MAIN_MENU = new LinkedHashMap<>();
+    static {
+        MAIN_MENU.put(1, "Show animals");
+        MAIN_MENU.put(2, "Add an animal");
+        MAIN_MENU.put(3, "Teach an animal a new command");
+        MAIN_MENU.put(0, "Exit");
     }
 
-    private static <K, V> void print(Map<K, V> map) {
+    public void start() {
+        print(MAIN_MENU);
+        navigate(promptOption(MAIN_MENU));
+    }
+
+    private <K, V> void print(Map<K, V> map) {
         System.out.println();
         for (Map.Entry<K, V> entry : map.entrySet()) {
             System.out.println(entry.getKey() + ". " + entry.getValue());
         }
-    }
-    public void start() {
-        print(MAIN_MENU);
-        navigate(promptOption(MAIN_MENU.length));
-    }
-
-    public void pause() {
-        System.out.println("\nContinue? [1-Yes, 0-No]");
-        switch (promptOption(2)) {
-            case 1 -> start();
-            case 0 -> System.exit(0);
-        }
-
     }
 
     private void navigate(int option) {
@@ -70,10 +45,16 @@ public class View {
         }
     }
 
+    public void pause() {
+        System.out.print("Press \"ENTER\" to continue...");
+        scanner.nextLine();
+        start();
+    }
+
     private void showAnimals(){
         try {
             System.out.println("\n PETS");
-            printAnimalTable(dataBaseManager.getPets());
+            printAnimalTable(dataBaseController.getPets());
         } catch (SQLException e) {
             System.out.println("Database error happened");
             System.out.println(e.getClass());
@@ -99,14 +80,18 @@ public class View {
 
     private void addAnimal() {
         print(AnimalType.ID_FOR_ANIMAL_TYPE);
-        AnimalType type = AnimalType.get(promptOption(ANIMAL_TYPE_MENU.length));
-
+        AnimalType type = AnimalType.get(promptOption(AnimalType.ID_FOR_ANIMAL_TYPE));
+        print(Gender.ID_FOR_GENDER);
+        Gender gender = Gender.get(promptOption(Gender.ID_FOR_GENDER));
         String name = promptName();
-//        LocalDate birthDate  = promptDate();
+        LocalDate birthDate  = promptDate();
 
-
-
-//        dataBaseManager.insert(AnimalFactory.create());
+        try {
+            dataBaseController.insert(AnimalFactory.create(name, birthDate, gender, type));
+        } catch (SQLException e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+        }
     }
 
     private String promptName() {
@@ -123,23 +108,26 @@ public class View {
         return LocalDate.parse(date);
     }
 
-    private int promptOption(int optionsCount) {
+    private <V> int promptOption(Map<Integer, V> map){
         int option = -1;
 
-        while (!(option >= 0 && option <= optionsCount - 1)) {
+        do {
             try {
-                System.out.print("\nChoose an option [0-" + (optionsCount - 1) + "]: ");
+                System.out.print("\nChoose an option " + map.keySet() + ": ");
                 option = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Please enter an integer value between 0 and " + (optionsCount - 1));
-                scanner.next();
+                System.out.println("Please enter an integer value " + map.keySet());
+                scanner.nextLine();
             } catch (Exception e) {
                 System.out.println("An unexpected error happened. Please try again");
-                scanner.next();
+                scanner.nextLine();
             }
-        }
+        } while (!map.containsKey(option));
+
+        scanner.nextLine();
         return option;
     }
+
 
 
 }

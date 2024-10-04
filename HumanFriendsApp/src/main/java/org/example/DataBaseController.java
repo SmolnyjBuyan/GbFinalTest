@@ -34,9 +34,9 @@ public class DataBaseController {
                 int id = resultSet.getInt(ID_COLUMN_INDEX);
                 String name = resultSet.getString(NAME_COLUMN_INDEX);
                 LocalDate birthDate = resultSet.getDate(BIRTH_DATE_COLUMN_INDEX).toLocalDate();
-                String gender = resultSet.getString(GENDER_COLUMN_INDEX);
-                int TypeId = resultSet.getInt(TYPE_COLUMN_INDEX);
-                Animal animal = AnimalFactory.create(name, birthDate, Gender.get(gender), AnimalType.get(TypeId));
+                int genderId = resultSet.getInt(GENDER_COLUMN_INDEX);
+                int typeId = resultSet.getInt(TYPE_COLUMN_INDEX);
+                Animal animal = AnimalFactory.create(name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
                 animal.setId(id);
                 animals.add(animal);
             }
@@ -49,11 +49,11 @@ public class DataBaseController {
     }
 
     private static PreparedStatement getInsertIntoPetsStatement(Animal pet) throws SQLException {
-        String query = "INSERT INTO pets(name, birth_date, gender, pet_type_id) VALUES(?, ?, ?, ?)";
+        String query = "INSERT INTO pets(name, birth_date, gender, animal_type_id) VALUES(?, ?, ?, ?)";
         PreparedStatement statement = DataBaseConnect.getConnection().prepareStatement(query);
         statement.setString(1, pet.getName());
         statement.setObject(2, pet.getBirthDate());
-        statement.setString(3, pet.getGender().getTitle());
+        statement.setInt(3, pet.getGender().getId());
         statement.setInt(4, pet.getType().getId());
         return statement;
     }
