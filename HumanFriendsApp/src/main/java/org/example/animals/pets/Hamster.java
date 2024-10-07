@@ -1,4 +1,4 @@
-package org.example.animals;
+package org.example.animals.pets;
 
 import org.example.utils.Gender;
 import org.example.utils.AnimalType;

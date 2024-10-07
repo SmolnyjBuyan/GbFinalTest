@@ -7,7 +7,7 @@ public enum Gender {
     MALE(1, "Male"), FEMALE(2,"Female");
     private final String title;
     private final int id;
-    public static final Map<Integer, Gender> ID_FOR_GENDER = new LinkedHashMap<>();
+    private static final Map<Integer, Gender> ID_FOR_GENDER = new LinkedHashMap<>();
 
     static {
         ID_FOR_GENDER.put(1, MALE);
@@ -24,6 +24,10 @@ public enum Gender {
 
     public static Gender get(int id) {
         return ID_FOR_GENDER.get(id);
+    }
+
+    public static Map<Integer, Gender> getGenderIdentities(){
+        return ID_FOR_GENDER;
     }
 
     @Override

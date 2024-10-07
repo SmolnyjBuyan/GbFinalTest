@@ -1,5 +1,7 @@
-package org.example.animals;
+package org.example.animals.pets;
 
+import org.example.animals.Animal;
+import org.example.utils.Command;
 import org.example.utils.Gender;
 import org.example.utils.AnimalType;
 
@@ -7,10 +9,14 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public abstract class Pet implements Animal {
+    public static final String TABLE_NAME = "pets";
+    public static final String COMMAND_TABLE_NAME = "pet_commands";
+    public static final String COMMAND_TABLE_COLUMN_NAME = "pet_id";
+
     private int id;
     private String name;
     private LocalDate birthDate;
-    private HashSet<String> commands;
+    private HashSet<Command> commands;
     private Gender gender;
     private AnimalType type;
 
@@ -18,11 +24,6 @@ public abstract class Pet implements Animal {
         this.name = name;
         this.birthDate = birthDate;
         this.gender = gender;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
     }
 
     @Override
@@ -50,12 +51,34 @@ public abstract class Pet implements Animal {
         return type;
     }
 
+    @Override
+    public HashSet<Command> getCommands() {
+        return commands;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setType(AnimalType type) {
         this.type = type;
     }
 
+
     @Override
-    public HashSet<String> getCommands() {
-        return commands;
+    public void setCommands(HashSet<Command> commands) {
+        this.commands = commands;
     }
+
+    @Override
+    public String getCommandTableName() {
+        return COMMAND_TABLE_NAME;
+    }
+
+    @Override
+    public String getCommandTableColumnName() {
+        return COMMAND_TABLE_COLUMN_NAME;
+    }
+
 }

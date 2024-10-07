@@ -1,17 +1,22 @@
 package org.example;
 
 import org.example.animals.*;
+import org.example.animals.pack_animals.PackAnimal;
+import org.example.animals.pets.Pet;
 import org.example.utils.AnimalFactory;
 import org.example.utils.AnimalType;
+import org.example.utils.Command;
 import org.example.utils.Gender;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 
 public class DataBaseController {
     private static final String PETS_TABLE_QUERY = "SELECT * FROM pets";
+    private static final String PACK_ANIMALS_TABLE_QUERY = "SELECT * FROM pack_animals";
     private static final int ID_COLUMN_INDEX = 1;
     private static final int NAME_COLUMN_INDEX = 2;
     private static final int BIRTH_DATE_COLUMN_INDEX = 3;
@@ -24,8 +29,8 @@ public class DataBaseController {
             AnimalType.HAMSTER, DataBaseController::insertIntoHamsters
     );
 
-    public ArrayList<Animal> getPets() throws SQLException {
-        ArrayList<Animal> animals = new ArrayList<>();
+    public ArrayList<Pet> getPets() throws SQLException {
+        ArrayList<Pet> pets = new ArrayList<>();
 
         try (Connection connection = DataBaseConnect.getConnection();
              Statement statement = connection.createStatement();
@@ -36,12 +41,54 @@ public class DataBaseController {
                 LocalDate birthDate = resultSet.getDate(BIRTH_DATE_COLUMN_INDEX).toLocalDate();
                 int genderId = resultSet.getInt(GENDER_COLUMN_INDEX);
                 int typeId = resultSet.getInt(TYPE_COLUMN_INDEX);
-                Animal animal = AnimalFactory.create(name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
-                animal.setId(id);
-                animals.add(animal);
+                Pet pet = (Pet) AnimalFactory.create(name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
+                pet.setId(id);
+                pet.setCommands(getCommands(pet));
+                pets.add(pet);
             }
         }
-        return animals;
+
+        return pets;
+    }
+
+    public ArrayList<PackAnimal> getPackAnimals() throws SQLException {
+        ArrayList<PackAnimal> packAnimals = new ArrayList<>();
+
+        try (Connection connection = DataBaseConnect.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(PACK_ANIMALS_TABLE_QUERY)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt(ID_COLUMN_INDEX);
+                String name = resultSet.getString(NAME_COLUMN_INDEX);
+                LocalDate birthDate = resultSet.getDate(BIRTH_DATE_COLUMN_INDEX).toLocalDate();
+                int genderId = resultSet.getInt(GENDER_COLUMN_INDEX);
+                int typeId = resultSet.getInt(TYPE_COLUMN_INDEX);
+                PackAnimal packAnimal = (PackAnimal) AnimalFactory.create
+                        (name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
+                packAnimal.setId(id);
+                packAnimal.setCommands(getCommands(packAnimal));
+                packAnimals.add(packAnimal);
+            }
+        }
+
+        return packAnimals;
+    }
+
+    private HashSet<Command> getCommands(Animal animal) throws SQLException {
+        String query = "SELECT command_id FROM " + animal.getCommandTableName() +
+                " WHERE " + animal.getCommandTableColumnName() + " = " + animal.getId();
+        HashSet<Command> commands = new HashSet<>();
+
+        try (Connection connection = DataBaseConnect.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                int command_id = resultSet.getInt(1);
+                commands.add(Command.get(command_id));
+            }
+        }
+
+        return commands;
     }
 
     public void insert(Animal animal) throws SQLException {

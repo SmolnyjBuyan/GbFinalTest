@@ -98,25 +98,25 @@ CREATE TABLE commands (
 );
 
 CREATE TABLE pet_commands (
-    id_pet INT UNSIGNED NOT NULL,
-	id_command INT UNSIGNED NOT NULL,
-    PRIMARY KEY(id_pet, id_command),
-	FOREIGN KEY(id_pet) REFERENCES pets(id)
+    pet_id INT UNSIGNED NOT NULL,
+	command_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY(pet_id, command_id),
+	FOREIGN KEY(pet_id) REFERENCES pets(id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE,
-    FOREIGN KEY(id_command) REFERENCES commands(id)
+    FOREIGN KEY(command_id) REFERENCES commands(id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE
 );
 
 CREATE TABLE pack_animal_commands (
-    id_pack_animal INT UNSIGNED NOT NULL,
-	id_command INT UNSIGNED NOT NULL,
-    PRIMARY KEY(id_pack_animal, id_command),
-	FOREIGN KEY(id_pack_animal) REFERENCES pack_animals(id)
+    pack_animal_id INT UNSIGNED NOT NULL,
+	command_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY(pack_animal_id, command_id),
+	FOREIGN KEY(pack_animal_id) REFERENCES pack_animals(id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE,
-    FOREIGN KEY(id_command) REFERENCES commands(id)
+    FOREIGN KEY(command_id) REFERENCES commands(id)
 		ON DELETE CASCADE
 		ON UPDATE CASCADE
 );

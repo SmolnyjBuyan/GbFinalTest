@@ -55,7 +55,7 @@ INSERT INTO commands (name) VALUES
     ('Kick'),
     ('Run');
     
-INSERT INTO pet_commands (id_command, id_pet) VALUES
+INSERT INTO pet_commands (command_id, pet_id) VALUES
 	((SELECT id FROM commands WHERE name = 'Sit'), 1),
     ((SELECT id FROM commands WHERE name = 'Stay'), 1),
     ((SELECT id FROM commands WHERE name = 'Fetch'), 1),
@@ -78,7 +78,7 @@ INSERT INTO pet_commands (id_command, id_pet) VALUES
     ((SELECT id FROM commands WHERE name = 'Scratch'), 8),
     ((SELECT id FROM commands WHERE name = 'Jump'), 8);
 
-INSERT INTO pack_animal_commands (id_command, id_pack_animal) VALUES
+INSERT INTO pack_animal_commands (command_id, pack_animal_id) VALUES
 	((SELECT id FROM commands WHERE name = 'Trot'), 1),
     ((SELECT id FROM commands WHERE name = 'Canter'), 1),
     ((SELECT id FROM commands WHERE name = 'Gallop'), 1),
