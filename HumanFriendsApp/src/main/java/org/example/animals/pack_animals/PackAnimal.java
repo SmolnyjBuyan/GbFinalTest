@@ -8,9 +8,10 @@ import org.example.utils.Gender;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-public class PackAnimal implements Animal {
+public abstract class PackAnimal implements Animal {
+    public static final String TABLE_NAME = "pack_animals";
     private static final String COMMAND_TABLE_NAME = "pack_animal_commands";
-    public static final String COMMAND_TABLE_COLUMN_NAME = "pack_animal_id";
+    private static final String COMMAND_TABLE_COLUMN_NAME = "pack_animal_id";
 
     private int id;
     private String name;
@@ -78,5 +79,9 @@ public class PackAnimal implements Animal {
     @Override
     public String getCommandTableColumnName() {
         return COMMAND_TABLE_COLUMN_NAME;
+    }
+
+    public String getParentTableName() {
+        return TABLE_NAME;
     }
 }

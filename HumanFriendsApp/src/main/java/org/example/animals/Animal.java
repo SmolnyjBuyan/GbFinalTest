@@ -21,4 +21,5 @@ public interface Animal {
     String getCommandTableName();
     String getCommandTableColumnName();
     String getTableName();
+    String getParentTableName();
 }

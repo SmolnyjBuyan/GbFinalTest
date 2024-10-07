@@ -14,45 +14,45 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class View {
-    DataBaseController dataBaseController = new DataBaseController();
-    DateValidator dateValidator = new DateValidator();
-    Scanner scanner = new Scanner(System.in);
+    static DataBaseController dataBaseController = new DataBaseController();
+    static DateValidator dateValidator = new DateValidator();
+    static Scanner scanner = new Scanner(System.in);
 
-    public static final Map<Integer, String> MAIN_MENU = new LinkedHashMap<>();
+    public static final Map<Integer, Option> ANIMALS_MENU = new LinkedHashMap<>();
     static {
-        MAIN_MENU.put(1, "Show animals");
-        MAIN_MENU.put(2, "Add an animal");
-        MAIN_MENU.put(3, "Teach an animal a new command");
-        MAIN_MENU.put(0, "Exit");
+        ANIMALS_MENU.put(1, new Option("Teach an animal a new command", View::pause));
+        ANIMALS_MENU.put(0, new Option("Back", View::start));
     }
 
-    public void start() {
+    public static final Map<Integer, Option> MAIN_MENU = new LinkedHashMap<>();
+    static {
+        MAIN_MENU.put(1, new Option("Show animals", View::showAnimals));
+        MAIN_MENU.put(2, new Option("Add an animal", View::addAnimal));
+        MAIN_MENU.put(0, new Option("Exit", View::stop));
+    }
+
+    public static void start() {
         print(MAIN_MENU);
-        navigate(promptOption(MAIN_MENU));
+        MAIN_MENU.get(promptOption(MAIN_MENU)).execute();
     }
 
-    private <K, V> void print(Map<K, V> map) {
+    public static void pause() {
+        System.out.print("Press \"ENTER\" to continue...");
+        scanner.nextLine();
+    }
+
+    public static void stop() {
+        System.exit(0);
+    }
+
+    private static <V> void print(Map<Integer, V> map) {
         System.out.println();
-        for (Map.Entry<K, V> entry : map.entrySet()) {
+        for (Map.Entry<Integer, V> entry : map.entrySet()) {
             System.out.println(entry.getKey() + ". " + entry.getValue());
         }
     }
 
-    private void navigate(int option) {
-        switch (option) {
-            case 1 -> showAnimals();
-            case 2 -> addAnimal();
-            case 0 -> System.exit(0);
-        }
-    }
-
-    public void pause() {
-        System.out.print("Press \"ENTER\" to continue...");
-        scanner.nextLine();
-        start();
-    }
-
-    private void showAnimals(){
+    public static void showAnimals(){
         try {
             System.out.println("\n PETS");
             print(dataBaseController.getPets());
@@ -68,8 +68,11 @@ public class View {
             System.out.println(e.getClass() + e.getMessage());
         }
         pause();
+        print(ANIMALS_MENU);
+        ANIMALS_MENU.get(promptOption(ANIMALS_MENU)).execute();
     }
-    private <T extends Animal> void print(List<T> animals) {
+
+    private static <T extends Animal> void print(List<T> animals) {
         AsciiTable asciiTable = new AsciiTable();
         asciiTable.addRule();
         asciiTable.addRow("Id", "Name", "Birthdate", "Gender", "Type", "Commands");
@@ -86,7 +89,7 @@ public class View {
         System.out.println(asciiTable.render());
     }
 
-    private void addAnimal() {
+    public static void addAnimal() {
         print(AnimalType.getAnimalTypes());
         AnimalType type = AnimalType.get(promptOption(AnimalType.getAnimalTypes()));
         print(Gender.getGenderIdentities());
@@ -97,20 +100,20 @@ public class View {
         try {
             dataBaseController.insert(AnimalFactory.create(name, birthDate, gender, type));
         } catch (SQLException e) {
-            System.out.println(e.getClass());
-            System.out.println(e.getMessage());
+            System.err.println(e.getStackTrace());
+            System.err.println(e.getMessage());
         }
         start();
     }
 
-    private String promptName() {
+    private static String promptName() {
         System.out.print("Enter a name: ");
         String name = scanner.next();
         scanner.nextLine();
         return name;
     }
 
-    private LocalDate promptDate() {
+    private static LocalDate promptDate() {
         String date;
 
         do {
@@ -122,7 +125,7 @@ public class View {
         return LocalDate.parse(date);
     }
 
-    private <V> int promptOption(Map<Integer, V> map){
+    private static <V> int promptOption(Map<Integer, V> map){
         int option = -1;
 
         do {

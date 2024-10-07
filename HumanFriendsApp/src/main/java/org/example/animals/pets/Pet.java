@@ -10,8 +10,8 @@ import java.util.HashSet;
 
 public abstract class Pet implements Animal {
     public static final String TABLE_NAME = "pets";
-    public static final String COMMAND_TABLE_NAME = "pet_commands";
-    public static final String COMMAND_TABLE_COLUMN_NAME = "pet_id";
+    private static final String COMMAND_TABLE_NAME = "pet_commands";
+    private static final String COMMAND_TABLE_COLUMN_NAME = "pet_id";
 
     private int id;
     private String name;
@@ -79,6 +79,10 @@ public abstract class Pet implements Animal {
     @Override
     public String getCommandTableColumnName() {
         return COMMAND_TABLE_COLUMN_NAME;
+    }
+
+    public String getParentTableName() {
+        return TABLE_NAME;
     }
 
 }
