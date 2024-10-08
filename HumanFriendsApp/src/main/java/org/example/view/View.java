@@ -4,10 +4,7 @@ import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.asciitable.CWC_LongestLine;
 import org.example.DataBaseController;
 import org.example.animals.Animal;
-import org.example.utils.AnimalFactory;
-import org.example.utils.AnimalType;
-import org.example.utils.DateValidator;
-import org.example.utils.Gender;
+import org.example.utils.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -59,13 +56,12 @@ public class View {
             System.out.println("\n PACK_ANIMALS");
             print(dataBaseController.getPackAnimals());
         } catch (SQLException e) {
-            System.out.println("Database error happened");
-            System.out.println(e.getClass());
-            System.out.println(e.getMessage());
-        }
-        catch (Exception e) {
-            System.out.println("An unexpected error happened. Please try again");
-            System.out.println(e.getClass() + e.getMessage());
+            System.err.println("Database error happened");
+            System.err.println(e.getClass());
+            System.err.println(e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An unexpected error happened. Please try again");
+            System.err.println(e.getClass() + e.getMessage());
         }
         pause();
         print(ANIMALS_MENU);
@@ -100,7 +96,7 @@ public class View {
         try {
             dataBaseController.insert(AnimalFactory.create(name, birthDate, gender, type));
         } catch (SQLException e) {
-            System.err.println(e.getStackTrace());
+            System.err.println(e.getClass());
             System.err.println(e.getMessage());
         }
         start();
@@ -133,16 +129,20 @@ public class View {
                 System.out.print("\nChoose an option " + map.keySet() + ": ");
                 option = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Please enter an integer value " + map.keySet());
+                System.err.println("Please enter an integer value " + map.keySet());
                 scanner.nextLine();
             } catch (Exception e) {
-                System.out.println("An unexpected error happened. Please try again");
-                System.out.println(e.getClass() + e.getMessage());
+                System.err.println("An unexpected error happened. Please try again");
+                System.err.println(e.getClass() + e.getMessage());
                 scanner.nextLine();
             }
         } while (!map.containsKey(option));
 
         scanner.nextLine();
         return option;
+    }
+
+    private void teachAnimal(Command command, Animal animal) {
+
     }
 }
