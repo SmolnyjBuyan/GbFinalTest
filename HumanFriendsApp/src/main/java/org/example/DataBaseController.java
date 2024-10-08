@@ -12,7 +12,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
 
 public class DataBaseController {
     public ArrayList<Pet> getPets() throws SQLException {
@@ -26,8 +25,7 @@ public class DataBaseController {
     private  <T extends Animal> ArrayList<T> getAnimals(String tableName) throws SQLException {
         ArrayList<T> animals = new ArrayList<>();
 
-        try (Connection connection = DataBaseConnect.getConnection();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBaseConnect.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName)) {
             while (resultSet.next()) {
                 int id = resultSet.getInt(1);
@@ -48,25 +46,18 @@ public class DataBaseController {
 
 
     private HashSet<Command> getCommands(Animal animal) throws SQLException {
-//        String query = "SELECT command_id FROM " + animal.getCommandTableName() +
-//                " WHERE " + animal.getCommandTableColumnName() + " = " + animal.getId();
         String query = "SELECT command_id FROM " + animal.getCommandTableName() +
-                " WHERE ? = ?" ;
+                " WHERE " + animal.getCommandTableColumnName() + " = ?" ;
         HashSet<Command> commands = new HashSet<>();
 
         try (PreparedStatement statement = DataBaseConnect.getConnection().prepareStatement(query)) {
-            statement.setString(1, animal.getCommandTableColumnName());
-            statement.setInt(2, animal.getId());
+            statement.setInt(1, animal.getId());
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int command_id = resultSet.getInt(1);
+                commands.add(Command.get(command_id));
+            }
         }
-
-//        try (Connection connection = DataBaseConnect.getConnection();
-//             Statement statement = connection.createStatement();
-//             ResultSet resultSet = statement.executeQuery(query)) {
-//            while (resultSet.next()) {
-//                int command_id = resultSet.getInt(1);
-//                commands.add(Command.get(command_id));
-//            }
-//        }
 
         return commands;
     }

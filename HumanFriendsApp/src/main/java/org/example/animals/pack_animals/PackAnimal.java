@@ -14,10 +14,10 @@ public abstract class PackAnimal implements Animal {
     private static final String COMMAND_TABLE_COLUMN_NAME = "pack_animal_id";
 
     private int id;
-    private String name;
-    private LocalDate birthDate;
+    private final String name;
+    private final LocalDate birthDate;
     private HashSet<Command> commands;
-    private Gender gender;
+    private final Gender gender;
     private AnimalType type;
 
     protected PackAnimal(String name, LocalDate birthDate, Gender gender) {

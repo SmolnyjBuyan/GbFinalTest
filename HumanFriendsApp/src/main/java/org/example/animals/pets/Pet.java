@@ -14,10 +14,10 @@ public abstract class Pet implements Animal {
     private static final String COMMAND_TABLE_COLUMN_NAME = "pet_id";
 
     private int id;
-    private String name;
-    private LocalDate birthDate;
+    private final String name;
+    private final LocalDate birthDate;
     private HashSet<Command> commands;
-    private Gender gender;
+    private final Gender gender;
     private AnimalType type;
 
     protected Pet(String name, LocalDate birthDate, Gender gender) {

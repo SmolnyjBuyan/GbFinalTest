@@ -1,8 +1,8 @@
 package org.example.view;
 
 public class Option {
-    private String title;
-    private Executable function;
+    private final String title;
+    private final Executable function;
 
     public Option(String title, Executable function) {
         this.title = title;
