@@ -5,17 +5,14 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
 
-public class DateValidator {
-    private final DateTimeFormatter dateTimeFormatter;
+public final class DateValidator {
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.US).
+            withResolverStyle(ResolverStyle.STRICT);
 
-    public DateValidator() {
-        this.dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.US).
-                withResolverStyle(ResolverStyle.STRICT);
-    }
 
-    public boolean isValid(String date) {
+    public static boolean isValid(String date) {
         try {
-            this.dateTimeFormatter.parse(date);
+            dateTimeFormatter.parse(date);
         } catch (DateTimeParseException e) {
             return false;
         }

@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.animals.*;
 import org.example.animals.pack_animals.PackAnimal;
+import org.example.animals.pets.Cat;
 import org.example.animals.pets.Pet;
 import org.example.utils.AnimalFactory;
 import org.example.utils.AnimalType;
@@ -13,17 +14,27 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class DataBaseController {
-    public ArrayList<Pet> getPets() throws SQLException {
-        return getAnimals(Pet.TABLE_NAME);
+public final class DataBaseController {
+    public static Animal getAnimal(int id, String tableName) throws SQLException {
+
+        try (PreparedStatement statement = DataBaseConnect.getConnection().
+                prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?")) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            String name = resultSet.getString(2);
+            LocalDate birthDate = resultSet.getDate(3).toLocalDate();
+            int genderId = resultSet.getInt(4);
+            int typeId = resultSet.getInt(5);
+            Animal animal = AnimalFactory.create(name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
+            animal.setId(id);
+            animal.setCommands(getCommands(animal));
+            return animal;
+        }
     }
 
-    public ArrayList<PackAnimal> getPackAnimals() throws SQLException {
-        return getAnimals(PackAnimal.TABLE_NAME);
-    }
-
-    private  <T extends Animal> ArrayList<T> getAnimals(String tableName) throws SQLException {
-        ArrayList<T> animals = new ArrayList<>();
+    private static ArrayList<Animal> getAnimals(String tableName) throws SQLException {
+        ArrayList<Animal> animals = new ArrayList<>();
 
         try (Statement statement = DataBaseConnect.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName)) {
@@ -33,8 +44,7 @@ public class DataBaseController {
                 LocalDate birthDate = resultSet.getDate(3).toLocalDate();
                 int genderId = resultSet.getInt(4);
                 int typeId = resultSet.getInt(5);
-                @SuppressWarnings("unchecked")
-                T animal = (T) AnimalFactory.create(name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
+                Animal animal = AnimalFactory.create(name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
                 animal.setId(id);
                 animal.setCommands(getCommands(animal));
                 animals.add(animal);
@@ -44,8 +54,16 @@ public class DataBaseController {
         return animals;
     }
 
+    public static ArrayList<Animal> getPets() throws SQLException {
+        return getAnimals(Pet.TABLE_NAME);
+    }
 
-    private HashSet<Command> getCommands(Animal animal) throws SQLException {
+    public static ArrayList<Animal> getPackAnimals() throws SQLException {
+        return getAnimals(PackAnimal.TABLE_NAME);
+    }
+
+
+    private static HashSet<Command> getCommands(Animal animal) throws SQLException {
         String query = "SELECT command_id FROM " + animal.getCommandTableName() +
                 " WHERE " + animal.getCommandTableColumnName() + " = ?" ;
         HashSet<Command> commands = new HashSet<>();
@@ -62,7 +80,7 @@ public class DataBaseController {
         return commands;
     }
 
-    public void insert(Animal animal) throws SQLException {
+    public static void insert(Animal animal) throws SQLException {
         String query = "INSERT INTO " + animal.getParentTableName() +
                 "(name, birth_date, gender_id, animal_type_id) VALUES(?, ?, ?, ?)";
         try (PreparedStatement statement = DataBaseConnect.getConnection().prepareStatement(query)) {
@@ -76,8 +94,9 @@ public class DataBaseController {
         }
     }
 
-    public void addCommandToAnimal(Command command, Animal animal) throws SQLException {
-        String query = "INSERT INTO" + animal.getCommandTableName() + "(command_id, pet_id) VALUES(?,?)";
+    public static void addCommandToAnimal(Command command, Animal animal) throws SQLException {
+        String query = "INSERT INTO " + animal.getCommandTableName() + "(command_id, " +
+                animal.getCommandTableColumnName()  + ") VALUES(?,?)";
         try (PreparedStatement statement = DataBaseConnect.getConnection().prepareStatement(query)){
             statement.setInt(1, command.getId());
             statement.setInt(2, animal.getId());

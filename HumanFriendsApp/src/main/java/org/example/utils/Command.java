@@ -50,7 +50,7 @@ public enum Command {
         return ID_FOR_COMMAND.get(id);
     }
 
-    public Map<Integer, Command> getCommands() {
+    public static Map<Integer, Command> getCommands() {
         return ID_FOR_COMMAND;
     }
 
