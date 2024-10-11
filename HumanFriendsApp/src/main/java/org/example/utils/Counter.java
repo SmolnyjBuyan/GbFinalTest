@@ -1,14 +1,25 @@
 package org.example.utils;
 
-public class Counter implements AutoCloseable{
-    static int sum;
+import java.io.IOException;
 
-    public void add() {
-        sum++;
+public class Counter implements AutoCloseable {
+    private static int counter = 0;
+    private boolean condition = false;
+
+    public Counter() {
+        open();
     }
 
-    @Override
-    public void close() throws Exception {
-        System.out.println("Counter is closed");
+    public void add() throws IOException {
+        if (!condition) throw new IOException();
+        else counter++;
+    }
+
+    public void open() {
+        condition = true;
+    }
+
+    public void close() {
+        condition = false;
     }
 }

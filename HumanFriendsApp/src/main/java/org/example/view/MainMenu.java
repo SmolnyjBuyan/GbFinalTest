@@ -6,6 +6,7 @@ import org.example.utils.AnimalType;
 import org.example.utils.Counter;
 import org.example.utils.Gender;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
@@ -34,7 +35,7 @@ public final class MainMenu implements Optionable{
         } catch (SQLException e) {
             System.err.println(e.getClass());
             System.err.println(e.getMessage());
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
