@@ -1,6 +1,7 @@
 package org.example.animals.pack_animals;
 
 import org.example.animals.Animal;
+import org.example.utils.AbstractAnimalType;
 import org.example.utils.AnimalType;
 import org.example.utils.Command;
 import org.example.utils.Gender;
@@ -9,16 +10,12 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public abstract class PackAnimal implements Animal {
-    public static final String TABLE_NAME = "pack_animals";
-    private static final String COMMAND_TABLE_NAME = "pack_animal_commands";
-    private static final String COMMAND_TABLE_COLUMN_NAME = "pack_animal_id";
-
     private int id;
     private final String name;
     private final LocalDate birthDate;
     private HashSet<Command> commands;
     private final Gender gender;
-    private AnimalType type;
+    private AnimalType animalType;
 
     protected PackAnimal(String name, LocalDate birthDate, Gender gender) {
         this.name = name;
@@ -42,8 +39,18 @@ public abstract class PackAnimal implements Animal {
     }
 
     @Override
-    public AnimalType getType() {
-        return type;
+    public Gender getGender() {
+        return gender;
+    }
+
+    @Override
+    public AnimalType getAnimalType() {
+        return animalType;
+    }
+
+    @Override
+    public AbstractAnimalType getAbstractAnimalType() {
+        return AbstractAnimalType.PACK_ANIMAL;
     }
 
     @Override
@@ -52,19 +59,13 @@ public abstract class PackAnimal implements Animal {
     }
 
     @Override
-    public Gender getGender() {
-        return gender;
-    }
-
-    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setType(AnimalType type) {
-        this.type = type;
+    public void setAnimalType(AnimalType animalType) {
+        this.animalType = animalType;
     }
-
 
     @Override
     public void setCommands(HashSet<Command> commands) {
@@ -73,15 +74,21 @@ public abstract class PackAnimal implements Animal {
 
     @Override
     public String getCommandTableName() {
-        return COMMAND_TABLE_NAME;
+        return AbstractAnimalType.PACK_ANIMAL.getCommandTableName();
     }
 
     @Override
     public String getCommandTableColumnName() {
-        return COMMAND_TABLE_COLUMN_NAME;
+        return AbstractAnimalType.PACK_ANIMAL.getCommandTableColumnName();
     }
 
+    @Override
     public String getParentTableName() {
-        return TABLE_NAME;
+        return AbstractAnimalType.PACK_ANIMAL.getTableName();
+    }
+
+    @Override
+    public String getTableName() {
+        return animalType.getTableName();
     }
 }

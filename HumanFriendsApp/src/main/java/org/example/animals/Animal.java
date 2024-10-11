@@ -1,5 +1,6 @@
 package org.example.animals;
 
+import org.example.utils.AbstractAnimalType;
 import org.example.utils.AnimalType;
 import org.example.utils.Command;
 import org.example.utils.Gender;
@@ -11,10 +12,11 @@ public interface Animal {
     int getId();
     String getName();
     LocalDate getBirthDate();
-    AnimalType getType();
+    AnimalType getAnimalType();
+    AbstractAnimalType getAbstractAnimalType();
     HashSet<Command> getCommands();
     Gender getGender();
-    void setType(AnimalType type);
+    void setAnimalType(AnimalType animalType);
     void setId(int id);
     void setCommands(HashSet<Command> commands);
 

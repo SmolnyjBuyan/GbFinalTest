@@ -20,12 +20,12 @@ public class AnimalMenu implements Optionable{
 
     private static void selectAnimal() {
         Optionable.print(AbstractAnimalType.getAnimalTypes());
-        String tableName = AbstractAnimalType.get(Prompt.getOption(AbstractAnimalType.getAnimalTypes())).getTableName();
+        AbstractAnimalType type = AbstractAnimalType.get(Prompt.getOption(AbstractAnimalType.getAnimalTypes()));
 
         while (true) {
             try {
                 int id = Prompt.getId();
-                animal = DataBaseController.getAnimal(id, tableName);
+                animal = DataBaseController.getAnimal(id, type);
                 return;
             } catch (SQLException e) {
                 System.err.println("There is no animal with such id");
@@ -35,7 +35,8 @@ public class AnimalMenu implements Optionable{
 
     private static void update() {
         try {
-            animal = DataBaseController.getAnimal(animal.getId(), animal.getParentTableName());
+            animal = DataBaseController.getAnimal(animal.getId(), animal.getAbstractAnimalType());
+            printMenu();
         } catch (SQLException e) {
             System.err.println("Update error");
             System.err.println(e.getClass());
@@ -50,12 +51,11 @@ public class AnimalMenu implements Optionable{
         try {
             DataBaseController.addCommandToAnimal(command, animal);
         } catch (SQLException e) {
-            System.err.println("Add command failed");
+            System.err.println("Insert into commands failed");
             System.err.println(e.getClass());
             System.err.println(e.getMessage());
         }
         update();
-        printMenu();
     }
 
     private static void printMenu(){

@@ -2,12 +2,8 @@ package org.example;
 
 import org.example.animals.*;
 import org.example.animals.pack_animals.PackAnimal;
-import org.example.animals.pets.Cat;
 import org.example.animals.pets.Pet;
-import org.example.utils.AnimalFactory;
-import org.example.utils.AnimalType;
-import org.example.utils.Command;
-import org.example.utils.Gender;
+import org.example.utils.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -15,37 +11,34 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public final class DataBaseController {
-    public static Animal getAnimal(int id, String tableName) throws SQLException {
+    public static Animal getAnimal(int id, AbstractAnimalType type) throws SQLException {
 
         try (PreparedStatement statement = DataBaseConnect.getConnection().
-                prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?")) {
+                prepareStatement("SELECT * FROM " + type.getTableName() + " WHERE id = ?")) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            String name = resultSet.getString(2);
-            LocalDate birthDate = resultSet.getDate(3).toLocalDate();
-            int genderId = resultSet.getInt(4);
-            int typeId = resultSet.getInt(5);
-            Animal animal = AnimalFactory.create(name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
+            Animal animal = AnimalFactory.create(resultSet.getString(2),
+                    resultSet.getDate(3).toLocalDate(),
+                    Gender.get(resultSet.getInt(4)),
+                    AnimalType.get(resultSet.getInt(5)));
             animal.setId(id);
             animal.setCommands(getCommands(animal));
             return animal;
         }
     }
 
-    private static ArrayList<Animal> getAnimals(String tableName) throws SQLException {
+    private static ArrayList<Animal> getAnimals(AbstractAnimalType abstractAnimalType) throws SQLException {
         ArrayList<Animal> animals = new ArrayList<>();
 
         try (Statement statement = DataBaseConnect.getConnection().createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName)) {
+             ResultSet resultSet = statement.executeQuery("SELECT * FROM " + abstractAnimalType.getTableName())) {
             while (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                String name = resultSet.getString(2);
-                LocalDate birthDate = resultSet.getDate(3).toLocalDate();
-                int genderId = resultSet.getInt(4);
-                int typeId = resultSet.getInt(5);
-                Animal animal = AnimalFactory.create(name, birthDate, Gender.get(genderId), AnimalType.get(typeId));
-                animal.setId(id);
+                Animal animal = AnimalFactory.create(resultSet.getString(2),
+                        resultSet.getDate(3).toLocalDate(),
+                        Gender.get(resultSet.getInt(4)),
+                        AnimalType.get(resultSet.getInt(5)));
+                animal.setId(resultSet.getInt(1));
                 animal.setCommands(getCommands(animal));
                 animals.add(animal);
             }
@@ -55,11 +48,11 @@ public final class DataBaseController {
     }
 
     public static ArrayList<Animal> getPets() throws SQLException {
-        return getAnimals(Pet.TABLE_NAME);
+        return getAnimals(AbstractAnimalType.PET);
     }
 
     public static ArrayList<Animal> getPackAnimals() throws SQLException {
-        return getAnimals(PackAnimal.TABLE_NAME);
+        return getAnimals(AbstractAnimalType.PACK_ANIMAL);
     }
 
 
@@ -72,8 +65,7 @@ public final class DataBaseController {
             statement.setInt(1, animal.getId());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int command_id = resultSet.getInt(1);
-                commands.add(Command.get(command_id));
+                commands.add(Command.get(resultSet.getInt(1)));
             }
         }
 
@@ -87,7 +79,7 @@ public final class DataBaseController {
             statement.setString(1, animal.getName());
             statement.setObject(2, animal.getBirthDate());
             statement.setInt(3, animal.getGender().getId());
-            statement.setInt(4, animal.getType().getId());
+            statement.setInt(4, animal.getAnimalType().getId());
             statement.addBatch();
             statement.addBatch("INSERT INTO " + animal.getTableName() + "(id) VALUES (LAST_INSERT_ID())");
             statement.executeBatch();

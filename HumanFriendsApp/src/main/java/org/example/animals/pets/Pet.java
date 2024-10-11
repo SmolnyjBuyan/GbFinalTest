@@ -1,6 +1,7 @@
 package org.example.animals.pets;
 
 import org.example.animals.Animal;
+import org.example.utils.AbstractAnimalType;
 import org.example.utils.Command;
 import org.example.utils.Gender;
 import org.example.utils.AnimalType;
@@ -9,16 +10,12 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public abstract class Pet implements Animal {
-    public static final String TABLE_NAME = "pets";
-    private static final String COMMAND_TABLE_NAME = "pet_commands";
-    private static final String COMMAND_TABLE_COLUMN_NAME = "pet_id";
-
     private int id;
     private final String name;
     private final LocalDate birthDate;
     private HashSet<Command> commands;
     private final Gender gender;
-    private AnimalType type;
+    private AnimalType animalType;
 
     protected Pet(String name, LocalDate birthDate, Gender gender) {
         this.name = name;
@@ -47,8 +44,13 @@ public abstract class Pet implements Animal {
     }
 
     @Override
-    public AnimalType getType() {
-        return type;
+    public AbstractAnimalType getAbstractAnimalType() {
+        return AbstractAnimalType.PET;
+    }
+
+    @Override
+    public AnimalType getAnimalType() {
+        return animalType;
     }
 
     @Override
@@ -61,10 +63,9 @@ public abstract class Pet implements Animal {
         this.id = id;
     }
 
-    public void setType(AnimalType type) {
-        this.type = type;
+    public void setAnimalType(AnimalType animalType) {
+        this.animalType = animalType;
     }
-
 
     @Override
     public void setCommands(HashSet<Command> commands) {
@@ -73,16 +74,20 @@ public abstract class Pet implements Animal {
 
     @Override
     public String getCommandTableName() {
-        return COMMAND_TABLE_NAME;
+        return AbstractAnimalType.PET.getCommandTableName();
     }
 
     @Override
     public String getCommandTableColumnName() {
-        return COMMAND_TABLE_COLUMN_NAME;
+        return AbstractAnimalType.PET.getCommandTableColumnName();
     }
 
+    @Override
     public String getParentTableName() {
-        return TABLE_NAME;
+        return AbstractAnimalType.PET.getTableName();
     }
 
+    public String getTableName() {
+        return animalType.getTableName();
+    }
 }

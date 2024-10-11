@@ -9,7 +9,6 @@ public final class DateValidator {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.US).
             withResolverStyle(ResolverStyle.STRICT);
 
-
     public static boolean isValid(String date) {
         try {
             dateTimeFormatter.parse(date);

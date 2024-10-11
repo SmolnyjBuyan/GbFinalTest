@@ -6,7 +6,6 @@ import org.example.animals.Animal;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public interface Optionable {
 
@@ -24,7 +23,7 @@ public interface Optionable {
 
         for (Animal animal : animals) {
             asciiTable.addRow(animal.getId(), animal.getName(), animal.getBirthDate(),
-                    animal.getGender(), animal.getType(), animal.getCommands());
+                    animal.getGender(), animal.getAnimalType(), animal.getCommands());
             asciiTable.addRule();
         }
 
