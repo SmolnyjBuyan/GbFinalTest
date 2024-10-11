@@ -1,6 +1,6 @@
 package org.example.view;
 
-import org.example.DataBaseController;
+import org.example.db.DataBaseController;
 import org.example.animals.Animal;
 import org.example.utils.AbstractAnimalType;
 import org.example.utils.Command;

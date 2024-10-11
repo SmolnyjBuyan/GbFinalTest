@@ -1,12 +1,9 @@
-package org.example;
+package org.example.db;
 
 import org.example.animals.*;
-import org.example.animals.pack_animals.PackAnimal;
-import org.example.animals.pets.Pet;
 import org.example.utils.*;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 
