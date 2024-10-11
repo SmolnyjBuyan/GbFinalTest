@@ -1,15 +1,15 @@
 package org.example.view;
 
-import org.example.DataBaseController;
+import org.example.db.DataBaseController;
 import org.example.utils.AnimalFactory;
 import org.example.utils.AnimalType;
+import org.example.utils.Counter;
 import org.example.utils.Gender;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public final class MainMenu implements Optionable{
 
@@ -28,11 +28,14 @@ public final class MainMenu implements Optionable{
         String name = Prompt.getName();
         LocalDate birthDate  = Prompt.getDate();
 
-        try {
+        try (Counter counter = new Counter()) {
             DataBaseController.insert(AnimalFactory.create(name, birthDate, gender, type));
+            counter.add();
         } catch (SQLException e) {
             System.err.println(e.getClass());
             System.err.println(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         render();
