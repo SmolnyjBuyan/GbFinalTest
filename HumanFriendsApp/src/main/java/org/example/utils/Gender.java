@@ -1,24 +1,37 @@
 package org.example.utils;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum Gender {
-    MALE("Male"), FEMALE("Female");
-    private final String TITLE;
-//    static final Map<String, Gender> TITLE_FOR_GENDER = Map.of(
-//            "Male", MALE,
-//            "Female", FEMALE
-//    );
+    MALE(1, "Male"), FEMALE(2,"Female");
+    private final String title;
+    private final int id;
+    private static final Map<Integer, Gender> ID_FOR_GENDER = new LinkedHashMap<>();
 
-    Gender(String title) {
-        this.TITLE = title;
+    static {
+        ID_FOR_GENDER.put(1, MALE);
+        ID_FOR_GENDER.put(2, FEMALE);
+    }
+    Gender(int id, String title) {
+        this.title = title;
+        this.id = id;
     }
 
-    public String getTitle() {
-        return TITLE;
+    public int getId() {
+        return id;
     }
 
-//    public Gender get(String title) {
-//        return TITLE_FOR_GENDER.get(title);
-//    }
+    public static Gender get(int id) {
+        return ID_FOR_GENDER.get(id);
+    }
+
+    public static Map<Integer, Gender> getGenderIdentities(){
+        return ID_FOR_GENDER;
+    }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

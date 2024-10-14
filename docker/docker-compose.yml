@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/my_secret_password
+    ports:
+      - "6033:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: always
+    secrets:
+      - my_secret_password
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    restart: always
+    environment:
+      PMA_HOST: db
+    ports:
+      - 8081:80
+    depends_on:
+      - db
+
+secrets:
+  my_secret_password:
+    file: ./my_secret_password.txt
+
+volumes:
+  dbdata:
