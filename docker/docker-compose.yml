@@ -7,7 +7,8 @@ services:
     ports:
       - "6033:3306"
     volumes:
-      - dbdata:/var/lib/mysql
+      - ./create_db.sql:/docker-entrypoint-initdb.d/1-create_db.sql
+      - ./insert_values.sql:/docker-entrypoint-initdb.d/2-insert_values.sql
     restart: always
     secrets:
       - my_secret_password
@@ -23,9 +24,20 @@ services:
     depends_on:
       - db
 
+  app:
+    build: .
+    container_name: app
+    restart: always
+    stdin_open: true
+    tty: true
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Password
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+    depends_on:
+      - db
+
 secrets:
   my_secret_password:
     file: ./my_secret_password.txt
-
-volumes:
-  dbdata:

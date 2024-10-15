@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker exec -it app java -jar /app/HumanFriendsApp-1.0-SNAPSHOT.jar
