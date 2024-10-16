@@ -1,5 +1,8 @@
 package org.example.utils;
 
+import org.example.view.ConsolePrinter;
+import org.example.view.ConsolePrompt;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -30,6 +33,13 @@ public enum Gender {
         return ID_FOR_GENDER;
     }
 
+    public static Gender prompt(){
+        return get(ConsolePrompt.getOption(ID_FOR_GENDER));
+    }
+
+    public static void print() {
+        ConsolePrinter.render(ID_FOR_GENDER);
+    }
     @Override
     public String toString() {
         return title;

@@ -1,5 +1,8 @@
 package org.example.utils;
 
+import org.example.view.ConsolePrinter;
+import org.example.view.ConsolePrompt;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -42,6 +45,14 @@ public enum AnimalType {
 
     public String getTableName() {
         return tableName;
+    }
+
+    public static AnimalType prompt(){
+        return get(ConsolePrompt.getOption(ID_FOR_ANIMAL_TYPE));
+    }
+
+    public static void print() {
+        ConsolePrinter.render(ID_FOR_ANIMAL_TYPE);
     }
 
     @Override

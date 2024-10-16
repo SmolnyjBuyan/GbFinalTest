@@ -7,9 +7,7 @@ import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
-
-
-public final class Prompt {
+public final class ConsolePrompt {
     static Scanner scanner = new Scanner(System.in);
 
     public static int getId() {
