@@ -1,5 +1,8 @@
 package org.example.utils;
 
+import org.example.view.ConsolePrinter;
+import org.example.view.ConsolePrompt;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -52,6 +55,14 @@ public enum Command {
 
     public static Map<Integer, Command> getCommands() {
         return ID_FOR_COMMAND;
+    }
+
+    public static Command prompt(){
+        return get(ConsolePrompt.getOption(ID_FOR_COMMAND));
+    }
+
+    public static void print() {
+        ConsolePrinter.render(ID_FOR_COMMAND);
     }
 
     @Override

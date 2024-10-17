@@ -1,5 +1,8 @@
 package org.example.utils;
 
+import org.example.view.ConsolePrinter;
+import org.example.view.ConsolePrompt;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -47,6 +50,14 @@ public enum AbstractAnimalType {
 
     public static Map<Integer, AbstractAnimalType> getAnimalTypes(){
         return ID_FOR_ABSTRACT_ANIMAL_TYPE;
+    }
+
+    public static AbstractAnimalType prompt(){
+        return get(ConsolePrompt.getOption(ID_FOR_ABSTRACT_ANIMAL_TYPE));
+    }
+
+    public static void print() {
+        ConsolePrinter.render(ID_FOR_ABSTRACT_ANIMAL_TYPE);
     }
 
     @Override
